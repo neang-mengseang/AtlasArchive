@@ -7,10 +7,19 @@ const Asset = require('../models/Asset');
 
 const router = express.Router();
 
+// Allowed asset categories
+const ALLOWED_CATEGORIES = ['ui', 'brand', 'illustrations', 'templates'];
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const category = req.body.category || 'ui';
+    
+    // Validate category to prevent path traversal
+    if (!ALLOWED_CATEGORIES.includes(category)) {
+      return cb(new Error('Invalid category. Must be one of: ui, brand, illustrations, templates'));
+    }
+    
     const uploadPath = path.join(__dirname, `../../assets/${category}`);
     
     // Ensure directory exists

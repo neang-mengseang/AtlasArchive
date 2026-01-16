@@ -133,12 +133,28 @@ class Asset {
 
   static async delete(id) {
     const assets = await this.loadAssets();
-    const filtered = assets.filter(a => a.id !== id);
+    const assetIndex = assets.findIndex(a => a.id === id);
     
-    if (filtered.length === assets.length) {
+    if (assetIndex === -1) {
       return false;
     }
 
+    const asset = assets[assetIndex];
+    
+    // Delete all version files from filesystem
+    const pathModule = require('path');
+    for (const version of asset.versions) {
+      const filePath = pathModule.join(__dirname, '../..', version.filePath);
+      try {
+        await fs.unlink(filePath);
+      } catch (error) {
+        // File might not exist, continue anyway
+        console.warn(`Failed to delete file: ${filePath}`, error.message);
+      }
+    }
+
+    // Remove from metadata
+    const filtered = assets.filter(a => a.id !== id);
     await this.saveAssets(filtered);
     return true;
   }
