@@ -47,12 +47,16 @@ const upload = multer({
       'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml',
       'image/webp', 'image/bmp', 'application/pdf',
       'application/postscript', // for .ai files
-      'application/octet-stream' // for .psd, .sketch, .fig, .xd files
+      // Note: application/octet-stream is used by .psd, .sketch, .fig, .xd files
+      // This is less secure but necessary for proprietary design formats
+      // Production systems should add file header validation
+      'application/octet-stream'
     ];
     
     const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedMimeTypes.includes(file.mimetype);
     
+    // Require both extension and MIME type to match
     if (mimetype && extname) {
       return cb(null, true);
     }

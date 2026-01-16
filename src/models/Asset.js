@@ -35,10 +35,8 @@ class Asset {
     try {
       await fs.mkdir(dir, { recursive: true });
     } catch (error) {
-      // Ignore EEXIST error (directory already exists), but log others
-      if (error.code !== 'EEXIST') {
-        console.warn('Error creating data directory:', error.message);
-      }
+      // Log any unexpected errors
+      console.warn('Error creating data directory:', error.message);
     }
     await fs.writeFile(ASSETS_DB_PATH, JSON.stringify(assets, null, 2));
   }
