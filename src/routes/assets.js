@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const Asset = require('../models/Asset');
 
@@ -11,6 +12,12 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const category = req.body.category || 'ui';
     const uploadPath = path.join(__dirname, `../../assets/${category}`);
+    
+    // Ensure directory exists
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
@@ -94,12 +101,15 @@ router.post('/', upload.single('file'), async (req, res) => {
       });
     }
 
+    // Extract category from the actual file destination
+    const actualCategory = path.basename(path.dirname(req.file.path));
+
     const assetData = {
       id: uuidv4(),
       name: req.body.name || req.file.originalname,
-      category: req.body.category || 'ui',
+      category: actualCategory,
       type: path.extname(req.file.originalname).substring(1),
-      filePath: `/assets/${req.body.category || 'ui'}/${req.file.filename}`,
+      filePath: `/assets/${actualCategory}/${req.file.filename}`,
       description: req.body.description || '',
       tags: req.body.tags ? req.body.tags.split(',').map(t => t.trim()) : []
     };
@@ -165,7 +175,9 @@ router.post('/:id/version', upload.single('file'), async (req, res) => {
       });
     }
 
-    const filePath = `/assets/${req.body.category || 'ui'}/${req.file.filename}`;
+    // Extract category from the actual file destination
+    const actualCategory = path.basename(path.dirname(req.file.path));
+    const filePath = `/assets/${actualCategory}/${req.file.filename}`;
     const asset = await Asset.addVersion(req.params.id, filePath);
 
     if (!asset) {

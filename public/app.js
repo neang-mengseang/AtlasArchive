@@ -19,11 +19,12 @@ function setupUploadForm() {
             return;
         }
 
-        formData.append('file', file);
-        formData.append('name', document.getElementById('name').value || file.name);
+        // Append category first so multer can use it for destination
         formData.append('category', document.getElementById('category').value);
+        formData.append('name', document.getElementById('name').value || file.name);
         formData.append('description', document.getElementById('description').value);
         formData.append('tags', document.getElementById('tags').value);
+        formData.append('file', file);
 
         try {
             const response = await fetch('/api/assets', {
