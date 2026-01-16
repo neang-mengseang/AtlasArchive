@@ -35,7 +35,10 @@ class Asset {
     try {
       await fs.mkdir(dir, { recursive: true });
     } catch (error) {
-      // Directory might already exist
+      // Ignore EEXIST error (directory already exists), but log others
+      if (error.code !== 'EEXIST') {
+        console.warn('Error creating data directory:', error.message);
+      }
     }
     await fs.writeFile(ASSETS_DB_PATH, JSON.stringify(assets, null, 2));
   }
@@ -142,9 +145,8 @@ class Asset {
     const asset = assets[assetIndex];
     
     // Delete all version files from filesystem
-    const pathModule = require('path');
     for (const version of asset.versions) {
-      const filePath = pathModule.join(__dirname, '../..', version.filePath);
+      const filePath = path.join(__dirname, '../..', version.filePath);
       try {
         await fs.unlink(filePath);
       } catch (error) {

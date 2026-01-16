@@ -42,11 +42,18 @@ const upload = multer({
   },
   fileFilter: (req, file, cb) => {
     // Allow common design file formats
-    const allowedTypes = /jpeg|jpg|png|gif|svg|pdf|psd|ai|sketch|fig|xd|webp|bmp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype) || file.mimetype.startsWith('image/');
+    const allowedExtensions = /jpeg|jpg|png|gif|svg|pdf|psd|ai|sketch|fig|xd|webp|bmp/;
+    const allowedMimeTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml',
+      'image/webp', 'image/bmp', 'application/pdf',
+      'application/postscript', // for .ai files
+      'application/octet-stream' // for .psd, .sketch, .fig, .xd files
+    ];
     
-    if (mimetype || extname) {
+    const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedMimeTypes.includes(file.mimetype);
+    
+    if (mimetype && extname) {
       return cb(null, true);
     }
     cb(new Error('Invalid file type. Only design asset files are allowed.'));
