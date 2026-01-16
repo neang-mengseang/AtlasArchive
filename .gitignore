@@ -1,0 +1,15 @@
+node_modules/
+uploads/
+data/
+assets/ui/*
+assets/brand/*
+assets/illustrations/*
+assets/templates/*
+!assets/ui/.gitkeep
+!assets/brand/.gitkeep
+!assets/illustrations/.gitkeep
+!assets/templates/.gitkeep
+.env
+.DS_Store
+*.log
+npm-debug.log*

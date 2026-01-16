@@ -1,0 +1,19 @@
+{
+  "name": "atlasarchive",
+  "version": "1.0.0",
+  "description": "AtlasArchive is a Design Asset Management System that helps teams store, organize, version, and reuse design assets efficiently.  It centralizes creative resources such as UI files, brand assets, illustrations, and templates into a single, structured system — enabling designers and developers to work faster, cleaner, and more consistently.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "uuid": "^13.0.0"
+  }
+}
