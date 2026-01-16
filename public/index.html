@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasArchive - Design Asset Management</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗂️ AtlasArchive</h1>
+            <p>Design Asset Management System</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2>Upload Asset</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">File:</label>
+                        <input type="file" id="file" name="file" required accept="image/*,.psd,.ai,.sketch,.fig,.xd,.pdf">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Asset name (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category">
+                            <option value="ui">UI Files</option>
+                            <option value="brand">Brand Assets</option>
+                            <option value="illustrations">Illustrations</option>
+                            <option value="templates">Templates</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Brief description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags:</label>
+                        <input type="text" id="tags" name="tags" placeholder="tag1, tag2, tag3">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload Asset</button>
+                </form>
+                <div id="uploadStatus" class="status-message"></div>
+            </section>
+
+            <!-- Search and Filter Section -->
+            <section class="search-section">
+                <h2>Browse Assets</h2>
+                <div class="filters">
+                    <input type="text" id="searchInput" placeholder="Search by name, description, or tags...">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="ui">UI Files</option>
+                        <option value="brand">Brand Assets</option>
+                        <option value="illustrations">Illustrations</option>
+                        <option value="templates">Templates</option>
+                    </select>
+                    <button onclick="loadAssets()" class="btn btn-secondary">Search</button>
+                </div>
+            </section>
+
+            <!-- Assets Display Section -->
+            <section class="assets-section">
+                <div id="assetsCount" class="assets-count"></div>
+                <div id="assetsList" class="assets-grid"></div>
+            </section>
+
+            <!-- Asset Detail Modal -->
+            <div id="assetModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div id="assetDetail"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
